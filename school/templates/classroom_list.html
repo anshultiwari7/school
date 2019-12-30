@@ -1,0 +1,70 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="container">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'classroom-list' %}">LenDenSchool</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'classroom-list' %}">Home</a></li>
+      <li><a href="{% url 'classroom-list' %}">Classrooms</a></li>
+      <li><a href="{% url 'student-list' %}">Students</a></li>
+      <li><a href="{% url 'teacher-list' %}">Teachers</a></li>
+      <li><a href="{% url 'subject-list' %}">Subjects</a></li>
+    </ul>
+  </div>
+</nav>  
+<h1>Classrooms</h1>
+ <table class="table">
+  <caption>List of classrooms</caption>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Seating Capacity</th>
+      <th scope="col">Shape</th>
+      <th scope="col">Total Students</th>
+      <th scope="col">Total Teachers</th>
+      <th scope="col">Total Subjects</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for classroom in classroom_list %}
+      <tr>
+        <td scope="row">{{forloop.counter}}</td>
+        <td>{{ classroom.name|title }}</td>
+        <td>{{ classroom.seating_capacity }}</td>
+        <td>{{ classroom.shape_string }}</td>
+        <td><a href="{% url 'student-list' %}?classroom={{ classroom.pk|urlencode }}">{{ classroom.number_of_students }}&nbsp;<i class="fa fa-external-link"></i></a></td>
+        <td><a href="{% url 'teacher-list' %}?classroom={{ classroom.pk|urlencode }}">{{ classroom.number_of_teachers }}&nbsp;<i class="fa fa-external-link"></i></a></td>
+        <td><a href="{% url 'subject-list' %}?classroom={{ classroom.pk|urlencode }}">{{ classroom.number_of_subjects }}&nbsp;<i class="fa fa-external-link"></i></a></td>
+      </tr>
+    {% empty %}
+      <p>No classrooms yet.</p>
+    {% endfor %}
+  </tbody>
+</table>
+ {% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+  {% endif %} 
+</html>

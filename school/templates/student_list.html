@@ -1,0 +1,162 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+.dropbtn {
+  background-color: black;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #3e8e41;
+}
+
+#myInput {
+  box-sizing: border-box;
+  background-image: url('searchicon.png');
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+#myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown a:hover {background-color: #ddd;}
+.show {display: block;}
+</style>
+</head>
+<body class="container">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'classroom-list' %}">LenDenSchool</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'classroom-list' %}">Home</a></li>
+      <li><a href="{% url 'classroom-list' %}">Classrooms</a></li>
+      <li><a href="{% url 'student-list' %}">Students</a></li>
+      <li><a href="{% url 'teacher-list' %}">Teachers</a></li>
+      <li><a href="{% url 'subject-list' %}">Subjects</a></li>
+    </ul>
+  </div>
+</nav>
+<h1>Students</h1>
+
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">
+    {% if selected_teacher %}
+      {{ selected_teacher }}
+    {% else %}
+      Teachers Filter
+    {% endif %}
+  </button>
+  <div id="myDropdown" class="dropdown-content">
+    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+    {% for teacher in teacher_list %}
+      <a href="{% url 'student-list' %}?teacher={{ teacher.pk|urlencode }}">{{ teacher.full_name|title }}</a>
+    {% endfor %}
+  </div>
+  {% if selected_teacher %}
+    <a href="{% url 'student-list' %}" class="button">Reset</a>
+  {% endif %}
+</div>
+<script>
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("myDropdown");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+</script>
+ <table class="table">
+  <caption>List of students</caption>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Standard</th>
+      <th scope="col">Classroom</th>
+      <th scope="col">Point of Contact</th>
+      <th scope="col">Teachers</th>
+      <th scope="col">Teachers Salary Sum in LPA</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in student_list %}
+      <tr>
+        <td scope="row">{{ forloop.counter }}</td>
+        <td>{{ student.full_name|title }}</td>
+        <td>{{ student.standard }}</td>
+        <td><a href="{% url 'classroom-list' %}?student={{ student.pk|urlencode }}">{{ student.total_classrooms }}&nbsp;<i class="fa fa-external-link"></a></td>
+        <td>{{ student.total_relatives }}</td>
+        <td><a href="{% url 'teacher-list' %}?student={{ student.pk|urlencode }}">{{ student.total_teachers }}&nbsp;<i class="fa fa-external-link"></a></td>
+        <td>{{ student.teachers_salary_sum }}</td>
+      </tr>
+    {% empty %}
+      <p>No students yet.</p>
+    {% endfor %}
+  </tbody>
+</table>
+ {% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+  {% endif %} 
+</body>
+</html>

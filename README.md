@@ -13,39 +13,40 @@ Setup-
  
 Project Structure -
 
-├── Procfile
-├── README.md
-├── db.sqlite3
-├── er-diagram.png
-├── lendenclub
-│   ├── __init__.py
-│   ├── __pycache__
-│   ├── asgi.py
-│   ├── settings.py
-│   ├── urls.py
-│   ├── utils.py
-│   └── wsgi.py
-├── manage.py
-├── requirements.txt
-└── school
-    ├── __init__.py
-    ├── __pycache__
-    ├── admin.py
-    ├── apps.py
-    ├── migrations
-    │   ├── 0001_initial.py
-    │   ├── 0002_delete_chapter.py
-    │   ├── __init__.py
-    │   └── __pycache__
-    ├── models.py
-    ├── templates
-    │   ├── classroom_list.html
-    │   ├── student_list.html
-    │   ├── subject_list.html
-    │   └── teacher_list.html
-    ├── tests.py
-    ├── urls.py
-    └── views.py
+Procfile
+README.md
+db.sqlite3
+er-diagram.png
+lendenclub/
+    __init__.py
+    __pycache__
+    asgi.py
+    settings.py
+    urls.py
+    utils.py
+    wsgi.py
+manage.py
+requirements.txt
+school/
+    __init__.py
+    __pycache__
+    admin.py
+    apps.py
+    migrations/
+        0001_initial.py
+        0002_delete_chapter.py
+        __init__.py
+        __pycache__
+    models.py
+    templates/
+        classroom_list.html
+        student_list.html
+        subject_list.html
+        teacher_list.html
+    tests.py
+    urls.py
+    views.py
+
 
 
 
